@@ -43,42 +43,42 @@
 // car.start();
 
 
-//song model
-var Song = Backbone.Model.extend({
-	initialize: function() {
-		console.log('A song has been created.');
-	},
-	validate: function(attrs) {
-		if (!attrs.title)
-			return "Title is required";
-	}
-});
+// //song model
+// var Song = Backbone.Model.extend({
+// 	initialize: function() {
+// 		console.log('A song has been created.');
+// 	},
+// 	validate: function(attrs) {
+// 		if (!attrs.title)
+// 			return "Title is required";
+// 	}
+// });
 
-var song = new Song();
+// var song = new Song();
 
-song.set("title", "Amado mio");
-song.set({
-	artist: "Large Storm",
-	publishYear: 2014
-});
+// song.set("title", "Amado mio");
+// song.set({
+// 	artist: "Large Storm",
+// 	publishYear: 2014
+// });
 
 
-//Animal model
+// //Animal model
 
-var Animal = Backbone.Model.extend({
-	walk: function() {
-		console.log('Animal walking');
-	}
-});
+// var Animal = Backbone.Model.extend({
+// 	walk: function() {
+// 		console.log('Animal walking');
+// 	}
+// });
 
-var Dog = Animal.extend({
-	walk: function() {
-		console.log('Dog walking...');
-	}
-});
+// var Dog = Animal.extend({
+// 	walk: function() {
+// 		console.log('Dog walking...');
+// 	}
+// });
 
-var dog = new Dog();
-dog.walk();
+// var dog = new Dog();
+// dog.walk();
 
 
 
@@ -123,3 +123,57 @@ car.set('registrationNumber', 'XLI887');
 car.start();
 
 
+
+// //collections
+
+// var Song = Backbone.Model.extend();
+
+// var Songs = Backbone.Collection.extend({
+// 	model: Song
+// });
+
+// var songs = new Songs([
+// 	new Song({title: 'Song1'}),
+// 	new Song({title: 'Song2'}),
+// 	new Song({title: 'Song3'})
+// ]);
+// songs.add(new Song({title: 'Song4'}));
+
+// songs.add(new Song({title: 'Song 5', genre: 'Jazz', downloads: 110}), {at: 0});
+// songs.push(new Song({title: 'Song 6', genre: 'Jazz', downloads: 90}));
+// var jazzSongs = songs.where({genre: 'Jazz'});
+// var firstJazzSong = songs.findWhere({ genre: 'Jazz'});
+// var filteredSongs = songs.where({genre: 'Jazz', downloads: 90});
+// var topDownloads = songs.filter(function(attr) {
+// 	return attr.get('downloads') > 100;
+// });
+
+// songs.each(function(song) {
+// 	console.log("Every",song);
+// })
+// console.log('Jazz songs', jazzSongs);
+// console.log('First Jazz song', firstJazzSong);
+// console.log('filtered by genre and downloads', filteredSongs);
+// console.log('Filtered bt top downloads', topDownloads);
+
+
+//Collection miniproject
+var Vehicles = Backbone.Collection.extend({
+	Model: Vehicle
+});
+var vehicles = new Vehicles([
+new Vehicle({registrationNumber: 'XLI887', colour: 'Blue'}),
+new Vehicle({registrationNumber: 'ZNP123', colour: 'Blue'}),
+new Vehicle({registrationNumber: 'XUV456', colour: 'Gray'}),
+]);
+
+var blueCars = vehicles.where({colour: 'Blue'});
+var specificCar = vehicles.where({registrationNumber: 'XLI887' });
+vehicles.remove(specificCar);
+var carsJson = vehicles.toJSON();
+vehicles.each(function(app) {
+	console.log(app);
+});
+console.log('Cars to json', carsJson);
+console.log('specific car', specificCar);
+console.log('Blue cars', blueCars);
