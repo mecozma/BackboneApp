@@ -177,3 +177,22 @@ vehicles.each(function(app) {
 console.log('Cars to json', carsJson);
 console.log('specific car', specificCar);
 console.log('Blue cars', blueCars);
+
+
+//Views
+
+var SongView = Backbone.View.extend({
+	tagName: 'span',
+	className: 'song',
+	id: 4321,
+	attributes: {
+		'data-genre': 'Jazz'
+	},
+render: function() {
+	this.$el.html('Hello Backbone');
+	return this;
+}
+});
+
+var songView = new SongView();
+$('#container').html(songView.render().$el);
