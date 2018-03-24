@@ -188,36 +188,47 @@ var Songs = Backbone.Collection.extend({
 
 var SongView = Backbone.View.extend({
 	tagName: 'li',
+	events: {
+		'click': 'onClick',
+		'click .bookmark': 'onClickBookmark'
+	},
+	onClick: function() {
+		console.log('Song playing!');
+	},
+	onClickBookmark: function(e) {
+		e.stopPropagation();
+		console.log('The song has been bookmarked!');
+	},
 	render: function () {
-		this.$el.html(this.model.get('title'));
+		this.$el.html(this.model.get('title') + ' ' + '<button>Listen</button> <button class=\'bookmark\'>Bookmark</button>');
 		return this;
 	}
 });
 
-var SongsView = Backbone.View.extend({
-	render: function() {
-		var self = this;
-		this.model.each(function(song){
-			var songView = new SongView({model: song});
-			self.$el.append(songView.render().$el);
-		});
+// var SongsView = Backbone.View.extend({
+// 	render: function() {
+// 		var self = this;
+// 		this.model.each(function(song){
+// 			var songView = new SongView({model: song});
+// 			self.$el.append(songView.render().$el);
+// 		});
 
-		return this;
-	}
-});
+// 		return this;
+// 	}
+// });
 
-// var song = new Song({ title: 'Sa nu spui nimanui' });
+var song = new Song({ title: 'Papercut' });
 
-var songs = new Songs([
-	new Song({title: 'What I\'ve done', author: 'Linkin Park'}),
-	new Song({title: 'The Trooper', author: 'Iron Maiden'}),
-	new Song({title: 'Thunderstruck', author: 'AC/DC'})
-]);
+// var songs = new Songs([
+// 	new Song({title: 'What I\'ve done', author: 'Linkin Park'}),
+// 	new Song({title: 'The Trooper', author: 'Iron Maiden'}),
+// 	new Song({title: 'Thunderstruck', author: 'AC/DC'})
+// ]);
 
-// var songView = new SongView({ el: '#container', model: song });
-// songView.render();
+var songView = new SongView({ el: '#songs', model: song });
+songView.render();
 // // $('#container').html(songView.render().$el);
 
-var songsView = new SongsView({el: '#songs', model: songs});
-songsView.render();
+// var songsView = new SongsView({el: '#songs', model: songs});
+// songsView.render();
 
