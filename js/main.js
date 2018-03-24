@@ -1,4 +1,4 @@
-		
+
 // // In the first few sections, we do all the coding here.
 // // Later, you'll see how to organize your code into separate
 // // files and modules.
@@ -88,21 +88,21 @@
 var Vehicle = Backbone.Model.extend({
 	idAttribute: 'registrationNumber',
 	rootUrl: '/api/vehicles',
-	validate: function(attrs) {
+	validate: function (attrs) {
 		if (!attrs.registrationNumber) {
 			return "Your vehicle needs a registration number!";
 		}
 	},
-	
-	start: function() {
+
+	start: function () {
 		console.log('Vehicle started.')
 	}
-	
+
 });
 
 var Car = Vehicle.extend({
-	initialize: function() {
-	console.log('Car with registration number' + this.get('registrationNumber') + 'started!');
+	initialize: function () {
+		console.log('Car with registration number' + this.get('registrationNumber') + 'started!');
 	}
 });
 
@@ -114,7 +114,7 @@ var car = new Car({
 car.unset('registrationNumber');
 
 
-if(!car.isValid()) {
+if (!car.isValid()) {
 	console.log(car.validationError);
 };
 
@@ -162,16 +162,16 @@ var Vehicles = Backbone.Collection.extend({
 	Model: Vehicle
 });
 var vehicles = new Vehicles([
-new Vehicle({registrationNumber: 'XLI887', colour: 'Blue'}),
-new Vehicle({registrationNumber: 'ZNP123', colour: 'Blue'}),
-new Vehicle({registrationNumber: 'XUV456', colour: 'Gray'}),
+	new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' }),
+	new Vehicle({ registrationNumber: 'ZNP123', colour: 'Blue' }),
+	new Vehicle({ registrationNumber: 'XUV456', colour: 'Gray' }),
 ]);
 
-var blueCars = vehicles.where({colour: 'Blue'});
-var specificCar = vehicles.where({registrationNumber: 'XLI887' });
+var blueCars = vehicles.where({ colour: 'Blue' });
+var specificCar = vehicles.where({ registrationNumber: 'XLI887' });
 vehicles.remove(specificCar);
 var carsJson = vehicles.toJSON();
-vehicles.each(function(app) {
+vehicles.each(function (app) {
 	console.log(app);
 });
 console.log('Cars to json', carsJson);
@@ -180,19 +180,44 @@ console.log('Blue cars', blueCars);
 
 
 //Views
+var Song = Backbone.Model.extend();
 
-var SongView = Backbone.View.extend({
-	tagName: 'span',
-	className: 'song',
-	id: 4321,
-	attributes: {
-		'data-genre': 'Jazz'
-	},
-render: function() {
-	this.$el.html('Hello Backbone');
-	return this;
-}
+var Songs = Backbone.Collection.extend({
+	model: Song
 });
 
-var songView = new SongView();
-$('#container').html(songView.render().$el);
+var SongView = Backbone.View.extend({
+	tagName: 'li',
+	render: function () {
+		this.$el.html(this.model.get('title'));
+		return this;
+	}
+});
+
+var SongsView = Backbone.View.extend({
+	render: function() {
+		var self = this;
+		this.model.each(function(song){
+			var songView = new SongView({model: song});
+			self.$el.append(songView.render().$el);
+		});
+
+		return this;
+	}
+});
+
+// var song = new Song({ title: 'Sa nu spui nimanui' });
+
+var songs = new Songs([
+	new Song({title: 'What I\'ve done', author: 'Linkin Park'}),
+	new Song({title: 'The Trooper', author: 'Iron Maiden'}),
+	new Song({title: 'Thunderstruck', author: 'AC/DC'})
+]);
+
+// var songView = new SongView({ el: '#container', model: song });
+// songView.render();
+// // $('#container').html(songView.render().$el);
+
+var songsView = new SongsView({el: '#songs', model: songs});
+songsView.render();
+
