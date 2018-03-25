@@ -267,59 +267,81 @@
 // songView.render();
 
 
-//Handling Collection Events
+// //Handling Collection Events
 
-//Model
+// //Model
+// var Song = Backbone.Model.extend();
+// //Collection to witch i Passed the model declared above
+// var Songs = Backbone.Collection.extend({
+// 	model: Song
+// });
+
+// //Views
+
+// var SongView = Backbone.View.extend({
+// 	tagName: 'li',
+// 	render: function () {
+// 		this.$el.html("title: " + this.model.get('title') + " author: " + this.model.get('author'));
+// 		this.$el.attr('id', this.model.id);
+
+// 		return this;
+// 	}
+// });
+
+// var SongsView = Backbone.View.extend({
+// 	tagName: 'ul',
+// 	initialize: function () {
+// 		this.model.on('add', this.onSongAdded, this);
+// 		this.model.on('remove', this.onSongRemoved, this);
+// 	},
+// 	onSongAdded: function (song) {
+// 		var songView = new SongView({ model: song });
+// 		this.$el.append(songView.render().$el);
+// 	},
+// 	onSongRemoved: function (song) {
+// 		// this.$el.find('li#' + song.id).remove();
+// 		this.$('li#' + song.id).remove();
+// 	},
+// 	render: function () {
+// 		var self = this;
+// 		this.model.each(function (song) {
+// 			var songView = new SongView({ model: song });
+// 			self.$el.append(songView.render().$el);
+// 		});
+
+// 	}
+// });
+
+// //Collections
+
+
+// var songs = new Songs([
+// 	new Song({ id: 1, title: 'What I\'ve done', author: 'Linkin Park' }),
+// 	new Song({ id: 2, title: 'The Trooper', author: 'Iron Maiden' }),
+// 	new Song({ id: 3, title: 'Thunderstruck', author: 'AC/DC' })
+// ]);
+
+// var songsView = new SongsView({ el: '#songs', model: songs });
+// songsView.render();
+
+
+//Templating
+
 var Song = Backbone.Model.extend();
-//Collection to witch i Passed the model declared above
-var Songs = Backbone.Collection.extend({
-	model: Song
-});
-
-//Views
 
 var SongView = Backbone.View.extend({
-	tagName: 'li',
-	render: function () {
-		this.$el.html("title: " + this.model.get('title') + " author: " + this.model.get('author'));
-		this.$el.attr('id', this.model.id);
+render: function() {
+	// this.$el.html(this.model.get('title') + ' ' + '<button>Listen</button');
 
-		return this;
-	}
+	var template = _.template($('#songTemplate').html());
+	var html = template(this.model.toJSON());
+	this.$el.html(html);
+	
+	return this;
+}
 });
 
-var SongsView = Backbone.View.extend({
-	tagName: 'ul',
-	initialize: function () {
-		this.model.on('add', this.onSongAdded, this);
-		this.model.on('remove', this.onSongRemoved, this);
-	},
-	onSongAdded: function (song) {
-		var songView = new SongView({ model: song });
-		this.$el.append(songView.render().$el);
-	},
-	onSongRemoved: function (song) {
-		// this.$el.find('li#' + song.id).remove();
-		this.$('li#' + song.id).remove();
-	},
-	render: function () {
-		var self = this;
-		this.model.each(function (song) {
-			var songView = new SongView({ model: song });
-			self.$el.append(songView.render().$el);
-		});
+var song = new Song({title: 'What I\'ve done', plays: 1000000});
 
-	}
-});
-
-//Collections
-
-
-var songs = new Songs([
-	new Song({ id: 1, title: 'What I\'ve done', author: 'Linkin Park' }),
-	new Song({ id: 2, title: 'The Trooper', author: 'Iron Maiden' }),
-	new Song({ id: 3, title: 'Thunderstruck', author: 'AC/DC' })
-]);
-
-var songsView = new SongsView({ el: '#songs', model: songs });
-songsView.render();
+var songView = new SongView({el: '#songs', model: song});
+songView.render();
