@@ -325,23 +325,94 @@
 // songsView.render();
 
 
-//Templating
+// //Templating
 
-var Song = Backbone.Model.extend();
+// var Song = Backbone.Model.extend();
 
-var SongView = Backbone.View.extend({
-render: function() {
-	// this.$el.html(this.model.get('title') + ' ' + '<button>Listen</button');
+// var SongView = Backbone.View.extend({
+// render: function() {
+// 	// this.$el.html(this.model.get('title') + ' ' + '<button>Listen</button');
 
-	var template = _.template($('#songTemplate').html());
-	var html = template(this.model.toJSON());
-	this.$el.html(html);
-	
-	return this;
+// 	var template = _.template($('#songTemplate').html());
+// 	var html = template(this.model.toJSON());
+// 	this.$el.html(html);
+
+// 	return this;
+// }
+// });
+
+// var song = new Song({title: 'What I\'ve done', plays: 1000000});
+
+// var songView = new SongView({el: '#songs', model: song});
+// songView.render();
+
+//Backbone Views miniproject
+
+var Vehicle = Backbone.Model.extend({
+	defaults: {
+		id: ''
 }
 });
 
-var song = new Song({title: 'What I\'ve done', plays: 1000000});
+var Vehicles = Backbone.Collection.extend({ model: Vehicle });
 
-var songView = new SongView({el: '#songs', model: song});
-songView.render();
+var VehicleView = Backbone.View.extend({
+	tagName: 'li',
+	className: 'vehicle',
+	events: {
+		'click .delete':'onClick'
+	},
+	onClick: function() {
+		this.remove();
+		console.log('I hear a click!');
+	},
+	 render: function () {
+	// 	this.$el.html(this.model.get('registrationNumber') + '<button class="delete">Delete</button>');
+		var template = _.template($('#vehicleTemplate').html());
+		var html = template(this.model.toJSON());
+		this.$el.html(html);
+		this.$el.attr('id', this.model.id);
+		return this;
+	},
+	attributes: {
+		'data': 'data-color'
+	}
+});
+
+var VehiclesView = Backbone.View.extend({
+	tagName: 'ul',
+	initialize: function() {
+		this.model.on('add', this.onVehicleAdded, this);
+		this.model.on('remove', this.onVehicleRemoved, this);
+	},
+	onVehicleAdded: function(vehicle) {
+		var vehicleView = new VehicleView({model: vehicle});
+
+		this.$el.append(vehicleView.render().$el);
+		console.log("A vehicle has been added to the collection");
+	},
+	onVehicleRemoved: function(vehicle) {
+		// this.$el.find('li#' + vehicle.id).remove();
+		this.$('li#' + vehicle.id).remove();
+		console.log('A vehicle has been removed from the collection');
+	},
+	render: function () {
+		var self = this;
+		this.model.each(function (vehicle) {
+			var vehicleView = new VehicleView({ model: vehicle });
+			self.$el.append(vehicleView.render().$el);
+	
+		});
+	}
+});
+
+
+var vehicles = new Vehicles([
+	new Vehicle({ id: 1, registrationNumber: 123 }),
+	new Vehicle({ id: 2, registrationNumber: 2 }),
+	new Vehicle({ id: 3, registrationNumber: 3 }),
+	new Vehicle({ id: 4, registrationNumber: 4 })
+]);
+
+var vehiclesView = new VehiclesView({ el: '#cars', model: vehicles });
+vehiclesView.render();

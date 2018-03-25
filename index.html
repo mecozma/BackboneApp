@@ -15,7 +15,7 @@
     </head>
     <body>
         <ul id="songs"></ul>
-        
+        <ul id="cars"></ul>
         <!-- Templates -->
         <script id="songTemplate" type="text/html">
         <%= title %>
@@ -23,6 +23,10 @@
         <% if (plays > 1000) { %>
             <span class="popular">Popular</span>
         <% } %>
+        </script>
+        <script id="vehicleTemplate" type="text/html">
+            <%= registrationNumber %>
+            <button class="delete">Delete</button>
         </script>
         
         <!-- Libraries -->
